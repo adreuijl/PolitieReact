@@ -33,10 +33,28 @@ const dossier_query = gql`
   }
   `;
 
+  
+  const dossier_toevoeg_query = gql`
+  mutation  {
+    createDossier (input: {
+      topConceptOf: {uri:"http://example.org/taxonomies/Taxonomie#InstantiesTbvReactApp"}
+      rdfs_label: "Voorbeeld toevoeging dossier"
+      prefLabel: {string: "Voorbeeld toevoeging dossier" }
+      uri: "http://example.org/taxonomies/Taxonomie#Werkstroomdossier999"
+    
+    }) 
+      
+    commit (message: "dossier toegevoegd")
+  }
+  
+  
+  `;
+
   export {
     dossier_filtered_query,
     dossier_query,
-    persoon_query
+    persoon_query,
+   
   }
 
   

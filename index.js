@@ -2,7 +2,7 @@ import React , { useState } from 'react';
 import ReactDOM, { render } from 'react-dom';
 import axios from 'axios'; 
 import './index.css';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, useMutation } from '@apollo/client';
 //import { useQuery, gql } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
 //import  { dossier_filtered_query, persoon_query, dossier_query } from './queries.js';
@@ -61,18 +61,38 @@ class Dossier extends React.Component {
 //{data.dossiers.map(dossierinfo => <DossierInfo key={data.uri} {...dossierinfo}/>)}
 
 class DossierFormulier extends React.Component {
-render()
+
+  state= { dossierNaam: ""};
+  state= { uriNaam: ""}
+
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(this.state.dossierNaam) 
+    console.log(this.state.uriNaam) 
+  };
+
+  render()
 {
   return (
-    <form>
-      <input placeholder="voer naam in">
-      </input>
+    <form onSubmit={this.handleSubmit}>
+      <input 
+      placeholder="voer naam in" 
+      value={this.state.dossierNaam}
+      onChange= {event => this.setState({dossierNaam: event.target.value})}
+      required />
+      <input 
+      placeholder="voer uri in" 
+      value={this.state.uriNaam}
+      onChange= {event => this.setState({uriNaam: event.target.value})}
+      required />
       <button>Maak dossier</button>
     </form>
   )
 }
 
 } ;
+
 
 class Persoon extends React.Component {
 
