@@ -33,28 +33,33 @@ const dossier_query = gql`
   }
   `;
 
-  
-  const dossier_toevoeg_query = gql`
-  mutation  {
-    createDossier (input: {
-      topConceptOf: {uri:"http://example.org/taxonomies/Taxonomie#InstantiesTbvReactApp"}
-      rdfs_label: "Voorbeeld toevoeging dossier"
-      prefLabel: {string: "Voorbeeld toevoeging dossier" }
-      uri: "http://example.org/taxonomies/Taxonomie#Werkstroomdossier999"
-    
-    }) 
-      
-    commit (message: "dossier toegevoegd")
-  }
-  
-  
-  `;
+const dossier_toevoeg_query = gql`
+mutation voegDossierToe($uri: ID) 
+{
+  createDossier(input: {
+    uri: $uri,
+    label: "test123",
+    type: {uri: "http://adser.nl/model/Dossier"},
+    broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    hidden: false,
+    note: {string: ""},
+    prefLabel: {string: "Yesssssss"}, 
+    rdfs_label:  "", 
+    topConceptOf: {uri: "http://example.org/taxonomies/taxonomie#InstantiesTbvReactApp"}, 
+})
+commit
+}
+`;
+
+
+
+//  commit (message: "dossier toegevoegd")
 
   export {
     dossier_filtered_query,
     dossier_query,
     persoon_query,
-   
+    dossier_toevoeg_query
   }
 
   

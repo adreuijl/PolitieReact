@@ -2,18 +2,27 @@ import React , { useState } from 'react';
 import ReactDOM, { render } from 'react-dom';
 import axios from 'axios'; 
 import './index.css';
-import { ApolloClient, InMemoryCache, useMutation } from '@apollo/client';
-//import { useQuery, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
-//import  { dossier_filtered_query, persoon_query, dossier_query } from './queries.js';
-import {DossierInfo, DossierLijst} from  './functies.js' ;
+//import  { dossier_toevoeg_query } from './queries.js';
+import {DossierInfo, DossierLijst, VoegDossierToe} from  './functies.js' ;
 
 
 // =========================Appolo direct ===
-const client = new ApolloClient({
+const link = createHttpLink({
   uri: 'http://localhost:8083/tbl/graphql/taxonomie',
-  cache: new InMemoryCache()
+  credentials: 'include'
 });
+
+const client = new ApolloClient({
+  
+  //uri: 'http://localhost:8083/tbl/graphql/_',
+  cache: new InMemoryCache() ,
+  link
+});
+
+
 
 // =========================App ===
 function App () {
@@ -29,7 +38,7 @@ function App () {
       <a href="#dossiers">Dossiers</a>
       <a href="#activiteiten">Activiteiten</a>
       </div>
-      <div className="formulier"><DossierFormulier /></div>
+      <div className="formulier"><VoegDossierToe /></div>
       <DossierLijst onDossierSelected={onDossierSelected} />
       <div>
           {selectedDossier && <DossierInfo uri={selectedDossier} />}
@@ -60,39 +69,6 @@ class Dossier extends React.Component {
 // {data.dossiers.map(dossier => <Dossier key={data.uri} {...dossier}/>)}
 //{data.dossiers.map(dossierinfo => <DossierInfo key={data.uri} {...dossierinfo}/>)}
 
-class DossierFormulier extends React.Component {
-
-  state= { dossierNaam: ""};
-  state= { uriNaam: ""}
-
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(this.state.dossierNaam) 
-    console.log(this.state.uriNaam) 
-  };
-
-  render()
-{
-  return (
-    <form onSubmit={this.handleSubmit}>
-      <input 
-      placeholder="voer naam in" 
-      value={this.state.dossierNaam}
-      onChange= {event => this.setState({dossierNaam: event.target.value})}
-      required />
-      <input 
-      placeholder="voer uri in" 
-      value={this.state.uriNaam}
-      onChange= {event => this.setState({uriNaam: event.target.value})}
-      required />
-      <button>Maak dossier</button>
-    </form>
-  )
-}
-
-} ;
-
 
 class Persoon extends React.Component {
 
@@ -117,5 +93,5 @@ ReactDOM.render(
 export {
   Dossier,
   Persoon,
-
+  VoegDossierToe
 }

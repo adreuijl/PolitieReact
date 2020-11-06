@@ -1,6 +1,6 @@
 import React from 'react';   //, { useState }
-import { useQuery, gql } from '@apollo/client';
-import  { dossier_filtered_query, persoon_query, dossier_query } from './queries.js';
+import { useQuery, useMutation } from '@apollo/client';
+import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query } from './queries.js';
 import   {Dossier, Persoon} from './index.js' ;
 
 
@@ -84,10 +84,37 @@ function DossierInfo ({ uri }) {
   };
 
  
+
+function VoegDossierToe () {
+    let input;
+    const [voegDossierToe, { data }] = useMutation(dossier_toevoeg_query);
+  
+    return (
+    <div>  
+      <form onSubmit= {e => {
+        e.preventDefault();
+        voegDossierToe({ variables: { uri: input.value } });
+        console.log(input.value);
+        input.value= ""
+      }}>
+        <input 
+          placeholder="voer uri in" 
+          ref={node => {
+            input = node;
+          }}
+         />
+        <button type="submit">Maak dossier</button>
+      </form>
+      </div>
+      
+    )
+  } ;
+  
   //{data.dossiers.map(dossierinfo => <DossierInfo key={data.uri} {...dossierinfo}/>)}
 
   export {
       DossierInfo,
       PersoonFunctie,
-      DossierLijst
+      DossierLijst,
+      VoegDossierToe
   }

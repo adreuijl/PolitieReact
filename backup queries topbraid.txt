@@ -1,0 +1,70 @@
+backup queries topbraid
+
+mutation 
+{
+  
+  createDossier(input: {
+    
+    uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier1114",
+    label: "test123",
+    type: {uri: "http://adser.nl/model/Dossier"},
+    broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    hidden: false,
+    note: {string: ""},
+    prefLabel: {string: "Werkstroomdossier1010"}, 
+    rdfs_label:  "", 
+    topConceptOf: {uri: "http://example.org/taxonomies/Taxonomie#InstantiesTbvReactApp"}, 
+    altLabel: {string: ""},
+    broader: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    changeNote: {string: ""},
+    closeMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    editorialNote: {string: ""},
+    exactMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    hiddenLabel: {string: ""},
+    narrower: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier123"},
+     related: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    historyNote: {string: ""},
+    notation:  "",
+    relatedMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    rdf_type: {uri: "http://adser.nl/model/Dossier"},
+    scopeNote:  {string: ""},
+    definition: {string: ""},
+    example: {string: ""}
+  })
+  commit
+  
+
+
+  mutation VoegDossierToe($uri: ID = "http://example.org/taxonomies/Taxonomie#Werkstroomdossier1102") 
+{
+  
+  createDossier(input: {
+    
+    uri: $uri,
+    label: "test123",
+    type: {uri: "http://adser.nl/model/Dossier"},
+    broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    hidden: false,
+    note: {string: ""},
+    prefLabel: {string: "Werkstroomdossier1010"}, 
+    rdfs_label:  "", 
+    topConceptOf: {uri: "http://example.org/taxonomies/Taxonomie#InstantiesTbvReactApp"}, 
+    altLabel: {string: ""},
+    broader: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    changeNote: {string: ""},
+    closeMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    editorialNote: {string: ""},
+    exactMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    hiddenLabel: {string: ""},
+    narrower: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier123"},
+     related: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    historyNote: {string: ""},
+    notation:  "",
+    relatedMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
+    rdf_type: {uri: "http://adser.nl/model/Dossier"},
+    scopeNote:  {string: ""},
+    definition: {string: ""},
+    example: {string: ""}
+  })
+  commit
+}
