@@ -33,18 +33,27 @@ const dossier_query = gql`
   }
   `;
 
+  const verwijder_dossier_query = gql`
+  mutation verwijderDossier($uri: ID)
+  {
+    delete(uri: $uri) 
+    report {
+      deletedCount
+    }
+    commit
+  }
+  `;
+
 const dossier_toevoeg_query = gql`
-mutation voegDossierToe($uri: ID) 
+mutation voegDossierToe($uri: ID, $label:[String]) 
 {
   createDossier(input: {
     uri: $uri,
-    label: "test123",
     type: {uri: "http://adser.nl/model/Dossier"},
     broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
     hidden: false,
     note: {string: ""},
-    prefLabel: {string: "Yesssssss"}, 
-    rdfs_label:  "", 
+    rdfs_label:  $label, 
     topConceptOf: {uri: "http://example.org/taxonomies/taxonomie#InstantiesTbvReactApp"}, 
 })
 commit
@@ -59,7 +68,8 @@ commit
     dossier_filtered_query,
     dossier_query,
     persoon_query,
-    dossier_toevoeg_query
+    dossier_toevoeg_query,
+    verwijder_dossier_query
   }
 
   

@@ -1,48 +1,32 @@
 import React from 'react';   //, { useState }
 import { useQuery, useMutation } from '@apollo/client';
-import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query } from './queries.js';
+import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query } from './queries.js';
 import   {Dossier, Persoon} from './index.js' ;
 
 
 
 function DossierLijst ({ onDossierSelected } ) {
     const { loading, error, data } = useQuery(dossier_query);
-  
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
   
     return(
     <div> <div className = "header_dossierlijst">Beschikbare dossiers</div>
-    <div className = "dossierlijst_info" name="dossier" onChange = {onDossierSelected}>
-
-     {data.dossiers.map(dossier => (
-       <div> <button className="listbutton" key={dossier.uri} value={dossier.uri} onClick = {onDossierSelected}>
-          {dossier.label}
-        </button>
-        </div>
-      ))}
+    <div className = "dossierlijst_info" >
+      {data.dossiers.map(
+          dossier => (
+            <div key={dossier.uri}> 
+              <button type="button" className="listbutton" key={dossier.uri} value={dossier.uri} onClick = {onDossierSelected}>
+                  {dossier.label}
+              </button>
+            </div>
+          )
+        )
+      }
     </div>
     </div>
     )
   }
-
-  
-
-
-  /*
- <div className = "header_dossierlijst">Beschikbare dossiers</div>
-    <div className = "dossierlijst_info">
-       {data.dossiers.map(dossier => <Dossier key={data.uri} {...dossier}/>)}
-    </div>
-
-
-
-{data.dossiers.map(dossier =>(
-        <button key={dossier.uri} value={dossier.label}>
-        {dossier.label}
-        </button>
-       ))}
-  */
 
 function PersoonFunctie() {
     const { loading, error, data } = useQuery(persoon_query);
@@ -60,7 +44,6 @@ function PersoonFunctie() {
   }
 
 function DossierInfo ({ uri }) {
-
     const { loading, error, data, refetch, networkStatus } = useQuery(
         dossier_filtered_query, 
         {
@@ -75,12 +58,59 @@ function DossierInfo ({ uri }) {
   
       return (
        <div>
-        <div className="dossierinfo_box">{data.dossiers.uri} {data.dossiers.label}</div>
-        {data.dossiers.map(dossier => <Dossier key={data.uri} {...dossier}/>)}
-        <div className="refetchbutton"> <button onClick={() => refetch()}>Refetch</button> </div>
+        {data.dossiers.map(dossier => <Dossier key={dossier.uri} {...dossier}/>)}
+        <div className="refetchbutton"> 
+          <button className ="refetchbutton" onClick={() => refetch()}>
+          Refetch
+          </button> 
+        </div>
+
        </div>
       )
     
+  };
+
+
+function VerwijderDossierLijst( { onGeselecteerdDossierVoorVerwijdering } ) {
+    const { loading, error, data } = useQuery(dossier_query);
+    if (loading) return null;
+    if (error) return `Error! ${error}`;
+    
+  return (
+    <div > 
+     <select onChange={onGeselecteerdDossierVoorVerwijdering}>
+     {data.dossiers.map(
+          dossier => (
+            <option key={dossier.uri} value={dossier.uri} >
+                  {dossier.uri}
+            </option>
+          )
+        )
+      }
+     </select>
+     </div>
+  )
+  };
+
+  // onchange={onGeselecteerdDossierVoorVerwijdering}
+
+
+  function VerwijderDossier( { uri } ) {
+    const [ verwijderDossier,{data}] = useMutation(verwijder_dossier_query);
+  return (
+      <div>
+         <form onSubmit= {e => {
+        e.preventDefault();
+        verwijderDossier(
+          { variables: { uri }  }
+        );
+        console.log({uri});
+        uri= ""
+      }}>
+        <button type="submit">Verwijder Dossier</button>
+        </form>
+      </div>
+   )
   };
 
  
@@ -89,16 +119,24 @@ function VoegDossierToe () {
     let input;
     const [voegDossierToe, { data }] = useMutation(dossier_toevoeg_query);
   
+    function camelCase(value) { 
+      return value.toLowerCase().replace(/\s+(.)/g, function(match, group1) {
+          return group1.toUpperCase();
+      });
+  }
+
     return (
     <div>  
       <form onSubmit= {e => {
         e.preventDefault();
-        voegDossierToe({ variables: { uri: input.value } });
+        voegDossierToe({ variables: {label:input.value,  uri: ("https://adser.nl/model/Dossier#"+camelCase(input.value)) } });
         console.log(input.value);
+        console.log(("https://adser.nl/model/Dossier#"+input.value));
         input.value= ""
       }}>
         <input 
-          placeholder="voer uri in" 
+          placeholder="naam dossier" 
+          required
           ref={node => {
             input = node;
           }}
@@ -116,5 +154,7 @@ function VoegDossierToe () {
       DossierInfo,
       PersoonFunctie,
       DossierLijst,
-      VoegDossierToe
+      VoegDossierToe,
+      VerwijderDossierLijst,
+      VerwijderDossier
   }

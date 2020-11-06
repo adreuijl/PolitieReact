@@ -6,7 +6,7 @@ import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apoll
 import { useQuery, gql } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
 //import  { dossier_toevoeg_query } from './queries.js';
-import {DossierInfo, DossierLijst, VoegDossierToe} from  './functies.js' ;
+import {DossierInfo, DossierLijst, VoegDossierToe, VerwijderDossierLijst, VerwijderDossier} from  './functies.js' ;
 
 
 // =========================Appolo direct ===
@@ -16,8 +16,6 @@ const link = createHttpLink({
 });
 
 const client = new ApolloClient({
-  
-  //uri: 'http://localhost:8083/tbl/graphql/_',
   cache: new InMemoryCache() ,
   link
 });
@@ -27,20 +25,29 @@ const client = new ApolloClient({
 // =========================App ===
 function App () {
   const [selectedDossier, setSelectedDossier] = useState(null) ;
+  const [GeselecteerdDossierVoorVerwijdering, setGeselecteerdDossierVoorVerwijdering] = useState(null) ;
+
   function onDossierSelected({ target }) {setSelectedDossier(target.value);};
+  function onGeselecteerdDossierVoorVerwijdering({ target }) {setGeselecteerdDossierVoorVerwijdering(target.value);};
     return (
     <ApolloProvider client={client}>
     <div>
-      
-      <h1 className = "header">Opp 3.0</h1>
-      <div className="topnav">
-      <a className="active" href="#home">Home</a>
-      <a href="#dossiers">Dossiers</a>
-      <a href="#activiteiten">Activiteiten</a>
-      </div>
-      <div className="formulier"><VoegDossierToe /></div>
-      <DossierLijst onDossierSelected={onDossierSelected} />
-      <div>
+        
+        <h1 className = "header">SEMA OPP 3.0: We Rock</h1>
+        <div className="topnav">
+        <a className="active" href="#home">Home</a>
+        <a href="#dossiers">Dossiers</a>
+        <a href="#activiteiten">Activiteiten</a>
+        </div>
+
+        <div className="formulier"><VoegDossierToe /></div>
+        <div className="formulier"><VerwijderDossierLijst onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
+        <div className="formulier">
+          <VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering}/>
+        </div>
+        <div><DossierLijst onDossierSelected={onDossierSelected} /></div>
+        
+        <div>
           {selectedDossier && <DossierInfo uri={selectedDossier} />}
         </div>
     </div>
@@ -55,8 +62,8 @@ class Dossier extends React.Component {
     const dossier = this.props ; 
     return (
       <div className= "dossier_info">
-        <div className= "dossier_label">{dossier.label}</div>
-        <div className= "dossier_uri">{dossier.uri}</div>
+        <div className= "dossier_label">Label: {dossier.label}</div>
+        <div className= "dossier_uri">Uri: {dossier.uri}</div>
       </div>
     )
   }
