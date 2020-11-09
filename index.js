@@ -48,7 +48,7 @@ function App () {
         <div className="formulier"><VoegDossierToe /></div>
         <div className="formulier_verwijder_dossier"><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering} onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
         <div><DossierLijst onDossierSelected={onDossierSelected} /></div>
-        <div>{selectedDossier && <DossierInfo uri={selectedDossier} />}</div>
+        <div>{selectedDossier && <DossierInfo uri={selectedDossier}/>}</div>
     </div>
     </ApolloProvider>
     )

@@ -1,6 +1,6 @@
 import React from 'react';   //, { useState }
 import { useQuery, useMutation } from '@apollo/client';
-import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query } from './queries.js';
+import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query, pas_label_aan_dossier } from './queries.js';
 import   {Dossier, Persoon} from './index.js' ;
 
 
@@ -41,8 +41,9 @@ function PersoonFunctie() {
     )
   }
 
-function DossierInfo ({ uri }) {
-    const { loading, error, data, refetch, networkStatus } = useQuery(
+function DossierInfo ({ uri, label }) {
+  let input;  
+  const { loading, error, data, refetch, networkStatus } = useQuery(
         dossier_filtered_query, 
         {
          variables: { uri },
@@ -50,20 +51,60 @@ function DossierInfo ({ uri }) {
         }
     );
     
+    const [pasLabelAan] = useMutation(pas_label_aan_dossier);
+
     if (networkStatus === 4) return <p>Refetch</p> ;
     if (loading) return null;
     if (error) return `Error! ${error}`;
   
       return (
        <div>
-        {data.dossiers.map(dossier => <Dossier key={dossier.uri} {...dossier}/>)}
+        {data.dossiers.map(dossier => (
+          <table className= "dossier_info">
+          <tbody>
+            <tr className="dossierinfo_table_header">
+              <th>Eigenschap</th>
+              <th>Waarde</th>
+              <th>Wijzig</th>
+            </tr>
+            <tr className= "dossier_uri">
+              <td>Uri </td>
+              <td>{dossier.uri}</td>
+            </tr>
+            <tr className= "dossier_label">
+              <td>Label </td>
+              <td> {dossier.label}</td>
+              <td>
+                <form className="dossierinfo_table_form'" onSubmit = {e => {
+          e.preventDefault();
+          pasLabelAan(
+            { variables: {label:input.value,  uri }  }
+          );
+          console.log({uri});
+          uri= ""
+        }}>
+                  <input placeholder="nieuw label" 
+          required
+          ref={node => {
+            input = node;
+          }} >
+                  </input>
+                  <button type="submit"  onClick={() => refetch()}>pas aan</button>
+                </form>
+              </td>
+            </tr> 
+          </tbody>
+       </table>
+        )
+        )
+        }
         <div className="refetchbutton"> 
           <button className ="refetchbutton" onClick={() => refetch()}>
           Refetch
           </button> 
         </div>
-
        </div>
+
       )
     
   };

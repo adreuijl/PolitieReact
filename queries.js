@@ -44,6 +44,18 @@ const dossier_query = gql`
   }
   `;
 
+  const pas_label_aan_dossier = gql`
+  mutation pasLabelAan($uri: ID , $label: [String])
+  {
+    updateDossier(input: 
+  {
+    uri: $uri
+    rdfs_label:$label
+  })
+    commit
+  }
+  `;
+
 const dossier_toevoeg_query = gql`
 mutation voegDossierToe($uri: ID, $label:[String]) 
 {
@@ -69,7 +81,8 @@ commit
     dossier_query,
     persoon_query,
     dossier_toevoeg_query,
-    verwijder_dossier_query
+    verwijder_dossier_query,
+    pas_label_aan_dossier
   }
 
   
