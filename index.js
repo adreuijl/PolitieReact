@@ -6,7 +6,7 @@ import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apoll
 import { useQuery, gql } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
 //import  { dossier_toevoeg_query } from './queries.js';
-import {DossierInfo, DossierLijst, VoegDossierToe, VerwijderDossierLijst, VerwijderDossier} from  './functies.js' ;
+import {DossierInfo, DossierLijst, VoegDossierToe, VerwijderDossier} from  './functies.js' ;
 
 
 // =========================Appolo direct ===
@@ -27,8 +27,13 @@ function App () {
   const [selectedDossier, setSelectedDossier] = useState(null) ;
   const [GeselecteerdDossierVoorVerwijdering, setGeselecteerdDossierVoorVerwijdering] = useState(null) ;
 
-  function onDossierSelected({ target }) {setSelectedDossier(target.value);};
-  function onGeselecteerdDossierVoorVerwijdering({ target }) {setGeselecteerdDossierVoorVerwijdering(target.value);};
+  function onDossierSelected({ target }) {
+    setSelectedDossier(target.value);
+  };
+
+  function onGeselecteerdDossierVoorVerwijdering({ target }) {
+    setGeselecteerdDossierVoorVerwijdering(target.value);
+  };
     
   return (
     <ApolloProvider client={client}>
@@ -41,10 +46,7 @@ function App () {
           <a href="#activiteiten">Activiteiten</a>
         </div>
         <div className="formulier"><VoegDossierToe /></div>
-        <div className="formulier_verwijder_dossier">
-          <div ><VerwijderDossierLijst onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
-          <div ><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering}/></div>
-        </div>
+        <div className="formulier_verwijder_dossier"><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering} onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
         <div><DossierLijst onDossierSelected={onDossierSelected} /></div>
         <div>{selectedDossier && <DossierInfo uri={selectedDossier} />}</div>
     </div>
@@ -73,7 +75,7 @@ class Dossier extends React.Component {
             <td>Label </td>
             <td> {dossier.label}</td>
             <td>
-              <form className="dossierinfo_table_form'">
+              <form className="dossierinfo_table_form'" >
                 <input placeholder="nieuw label" >
                 </input>
                 <button>pas aan</button>

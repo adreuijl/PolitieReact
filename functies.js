@@ -34,13 +34,11 @@ function PersoonFunctie() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
   
-      return(
-        <div>
-  
-           {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
-        </div>
-        
-        )
+    return(
+      <div>
+        {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
+      </div>
+    )
   }
 
 function DossierInfo ({ uri }) {
@@ -71,46 +69,44 @@ function DossierInfo ({ uri }) {
   };
 
 
-function VerwijderDossierLijst( { onGeselecteerdDossierVoorVerwijdering } ) {
+  function VerwijderDossier( {uri, onGeselecteerdDossierVoorVerwijdering} ) {
+
     const { loading, error, data } = useQuery(dossier_query);
+    const [verwijderDossier] = useMutation(verwijder_dossier_query);
+
     if (loading) return null;
     if (error) return `Error! ${error}`;
-    
-  return (
-    <div > 
-     <select onChange={onGeselecteerdDossierVoorVerwijdering}>
-     {data.dossiers.map(
-          dossier => (
-            <option key={dossier.uri} value={dossier.uri} >
-                  {dossier.uri}
-            </option>
-          )
-        )
-      }
-     </select>
-     </div>
-  )
-  };
+  
 
-  function VerwijderDossier( { uri } ) {
-    const [ verwijderDossier,{data}] = useMutation(verwijder_dossier_query);
-  return (
+    return (
       <div className="verwijder_dossier">
-         <form onSubmit= {e => {
-        e.preventDefault();
-        verwijderDossier(
-          { variables: { uri }  }
-        );
-        console.log({uri});
-        uri= ""
-      }}>
-        <button type="submit">Verwijder Dossier</button>
-        </form>
+        <form onSubmit= {e => {
+          e.preventDefault();
+          verwijderDossier(
+            { variables: { uri }  }
+          );
+          console.log({uri});
+          uri= ""
+        }}>
+          <select onChange={onGeselecteerdDossierVoorVerwijdering}>
+            {data.dossiers.map
+              (
+                dossier => (
+                  <option key={dossier.uri} value={dossier.uri} >
+                    {dossier.uri}
+                  </option>
+                )
+              )
+            }
+          </select>
+          <button type="submit">
+            Verwijder Dossier
+          </button>
+
+          </form>
       </div>
    )
   };
-
- 
 
 function VoegDossierToe () {
     let input;
@@ -121,7 +117,6 @@ function VoegDossierToe () {
           return group1.toUpperCase();
       });
   }
-
     return (
     <div>  
       <form onSubmit= {e => {
@@ -152,6 +147,5 @@ function VoegDossierToe () {
       PersoonFunctie,
       DossierLijst,
       VoegDossierToe,
-      VerwijderDossierLijst,
       VerwijderDossier
   }
