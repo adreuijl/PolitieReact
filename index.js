@@ -29,27 +29,24 @@ function App () {
 
   function onDossierSelected({ target }) {setSelectedDossier(target.value);};
   function onGeselecteerdDossierVoorVerwijdering({ target }) {setGeselecteerdDossierVoorVerwijdering(target.value);};
-    return (
+    
+  return (
     <ApolloProvider client={client}>
     <div>
         
         <h1 className = "header">SEMA OPP 3.0: We Rock</h1>
         <div className="topnav">
-        <a className="active" href="#home">Home</a>
-        <a href="#dossiers">Dossiers</a>
-        <a href="#activiteiten">Activiteiten</a>
+          <a className="active" href="#home">Home</a>
+          <a href="#dossiers">Dossiers</a>
+          <a href="#activiteiten">Activiteiten</a>
         </div>
-
         <div className="formulier"><VoegDossierToe /></div>
-        <div className="formulier"><VerwijderDossierLijst onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
-        <div className="formulier">
-          <VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering}/>
+        <div className="formulier_verwijder_dossier">
+          <div ><VerwijderDossierLijst onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
+          <div ><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering}/></div>
         </div>
         <div><DossierLijst onDossierSelected={onDossierSelected} /></div>
-        
-        <div>
-          {selectedDossier && <DossierInfo uri={selectedDossier} />}
-        </div>
+        <div>{selectedDossier && <DossierInfo uri={selectedDossier} />}</div>
     </div>
     </ApolloProvider>
     )
@@ -61,10 +58,31 @@ class Dossier extends React.Component {
   ) {
     const dossier = this.props ; 
     return (
-      <div className= "dossier_info">
-        <div className= "dossier_label">Label: {dossier.label}</div>
-        <div className= "dossier_uri">Uri: {dossier.uri}</div>
-      </div>
+      <table className= "dossier_info">
+        <tbody>
+          <tr className="dossierinfo_table_header">
+            <th>Eigenschap</th>
+            <th>Waarde</th>
+            <th>Wijzig</th>
+          </tr>
+          <tr className= "dossier_uri">
+            <td>Uri </td>
+            <td>{dossier.uri}</td>
+          </tr>
+          <tr className= "dossier_label">
+            <td>Label </td>
+            <td> {dossier.label}</td>
+            <td>
+              <form className="dossierinfo_table_form'">
+                <input placeholder="nieuw label" >
+                </input>
+                <button>pas aan</button>
+              </form>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
     )
   }
 };

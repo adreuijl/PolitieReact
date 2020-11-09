@@ -92,13 +92,10 @@ function VerwijderDossierLijst( { onGeselecteerdDossierVoorVerwijdering } ) {
   )
   };
 
-  // onchange={onGeselecteerdDossierVoorVerwijdering}
-
-
   function VerwijderDossier( { uri } ) {
     const [ verwijderDossier,{data}] = useMutation(verwijder_dossier_query);
   return (
-      <div>
+      <div className="verwijder_dossier">
          <form onSubmit= {e => {
         e.preventDefault();
         verwijderDossier(
