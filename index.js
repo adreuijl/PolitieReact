@@ -1,12 +1,9 @@
 import React , { useState } from 'react';   
 import ReactDOM, { render } from 'react-dom';
-//import axios from 'axios'; 
 import './index.css';
 import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apollo/client';
-//import { useQuery, gql } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
-//import  { dossier_toevoeg_query } from './queries.js';
-import {DossierInfo, DossierLijst, VoegDossierToe, VerwijderDossier} from  './functies.js' ;
+import {DossierInfo, DossierLijst, VoegDossierToe} from  './functies.js' ;
 
 
 // =========================Appolo direct connector===
@@ -45,7 +42,7 @@ function App () {
           <a href="#activiteiten">Activiteiten</a>
         </div>
         <div className="app_maak_dossier"><VoegDossierToe /></div>
-        <div className="app_verwijder_dossier"><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering} onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
+        
         <div className="app_beschikbare_dossiers"><DossierLijst onDossierSelected={onDossierSelected} /></div>
         <div className="app_dossierinfo">{selectedDossier && <DossierInfo uri={selectedDossier}/>}</div>
     </div>
@@ -60,6 +57,7 @@ ReactDOM.render(
   document.getElementById('root')
 )
 
+// <div className="app_verwijder_dossier"><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering} onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
 
 //{testData.map(dossier => <Dossier key={testData.uri} {...dossier}/>)}
 // Je geeft in de klasse dossier de properties mee, die kunnen als input dienen in dossier dus: <Dossier uri={testData[0].uri} label={testData[0].label}/>  etc etc..

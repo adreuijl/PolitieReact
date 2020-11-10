@@ -17,7 +17,8 @@ const dossier_query = gql`
     dossiers(uri: $uri) 
     {
       uri
-      label
+      rdfs_label
+      prefLabel {string}
     }
   }
   `;
@@ -46,11 +47,12 @@ const dossier_query = gql`
   `;
 
 const dossier_toevoeg_query = gql`
-mutation voegDossierToe($uri: ID, $label:[String]) 
+mutation voegDossierToe($uri: ID, $label:[String],  $prefLabel: String!) 
 {
   createDossier(input: {
     uri: $uri,
     type: {uri: "http://adser.nl/model/Dossier"},
+    prefLabel: {string: $prefLabel},
     broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
     hidden: false,
     note: {string: ""},

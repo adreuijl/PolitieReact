@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query, pas_label_aan_dossier } from './queries.js';
 
 function DossierLijst ({ onDossierSelected } ) {
+    const [verwijderDossier] = useMutation(verwijder_dossier_query);
     const { loading, error, data } = useQuery(dossier_query);
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
@@ -13,7 +14,16 @@ function DossierLijst ({ onDossierSelected } ) {
     <div className = "dossierlijst_inhoud" >
       {data.dossiers.map(
           dossier => (
-            <div key={dossier.uri}> 
+            <div key={dossier.uri}>
+              <form 
+                   className="dossierlijst_inhoud_formulier" 
+                  onSubmit = {e => {
+                  e.preventDefault();
+                  if (window.confirm ('Weet je het zeker?'))
+                  verwijderDossier({ variables: { uri:dossier.uri }  });
+                  
+                  }}
+                  >
               <button 
               type="button" 
               className="dossierlijst_inhoud_listbutton" 
@@ -21,7 +31,14 @@ function DossierLijst ({ onDossierSelected } ) {
               value={dossier.uri} 
               onClick = {onDossierSelected}>
                   {dossier.label}
+                  
               </button>
+              <button
+                type =  "submit"
+                className="dossierlijst_inhoud_verwijderbutton" >
+                verwijder
+              </button>
+              </form> 
             </div>
           )
         )
@@ -66,8 +83,8 @@ function DossierInfo ({ uri }) {
               <td>{dossier.uri}</td>
             </tr>
             <tr className= "dossierinfo_label">
-              <td>Label </td>
-              <td> {dossier.label}</td>
+              <td>rdfs label</td>
+              <td> {dossier.rdfs_label}</td>
               <td>
                 <form className="dossierinfo_table_form'" onSubmit = {e => {
                   e.preventDefault();
@@ -87,6 +104,10 @@ function DossierInfo ({ uri }) {
                   <button  type="submit" >pas aan</button>
                 </form>
               </td>
+            </tr>
+            <tr className= "dossierinfo_preflabel">
+              <td>prefLabel </td>
+              <td> {dossier.prefLabel.map(prefLabel =>(<div>{prefLabel.string} </div>))}</td>
             </tr> 
           </tbody>
        </table>
@@ -103,6 +124,56 @@ function DossierInfo ({ uri }) {
       )
   };
 
+
+function VoegDossierToe () {
+    let input;
+    const [voegDossierToe, { data }] = useMutation(dossier_toevoeg_query);
+  
+    function camelCase(value) { 
+      return value.toLowerCase().replace(/\s+(.)/g, function(match, group1) {
+          return group1.toUpperCase();
+      });
+  }
+    return (
+    <div>  
+      <form onSubmit= {e => {
+        e.preventDefault();
+        voegDossierToe({ variables: {label:input.value,  uri: ("https://adser.nl/model/Dossier#"+camelCase(input.value)), prefLabel:input.value } });
+        console.log(input.value);
+        console.log(("https://adser.nl/model/Dossier#"+input.value));
+        input.value= ""
+      }}>
+        <input 
+          placeholder="naam dossier" 
+          required
+          ref={node => {
+            input = node;
+          }}
+         />
+        <button type="submit">Maak dossier</button>
+      </form>
+      </div>
+      
+    )
+  } ;
+  
+  
+  /*
+function PersoonFunctie() {
+    const { loading, error, data } = useQuery(persoon_query);
+  
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :(</p>;
+  
+    return(
+      <div>
+        {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
+      </div>
+    )
+  }
+
+
+  
 
   function VerwijderDossier( {uri, onGeselecteerdDossierVoorVerwijdering} ) {
 
@@ -142,59 +213,11 @@ function DossierInfo ({ uri }) {
       </div>
    )
   };
-
-function VoegDossierToe () {
-    let input;
-    const [voegDossierToe, { data }] = useMutation(dossier_toevoeg_query);
-  
-    function camelCase(value) { 
-      return value.toLowerCase().replace(/\s+(.)/g, function(match, group1) {
-          return group1.toUpperCase();
-      });
-  }
-    return (
-    <div>  
-      <form onSubmit= {e => {
-        e.preventDefault();
-        voegDossierToe({ variables: {label:input.value,  uri: ("https://adser.nl/model/Dossier#"+camelCase(input.value)) } });
-        console.log(input.value);
-        console.log(("https://adser.nl/model/Dossier#"+input.value));
-        input.value= ""
-      }}>
-        <input 
-          placeholder="naam dossier" 
-          required
-          ref={node => {
-            input = node;
-          }}
-         />
-        <button type="submit">Maak dossier</button>
-      </form>
-      </div>
-      
-    )
-  } ;
-  
-  
-  /*
-function PersoonFunctie() {
-    const { loading, error, data } = useQuery(persoon_query);
-  
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
-  
-    return(
-      <div>
-        {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
-      </div>
-    )
-  }
   */
 
 
   export {
       DossierInfo,
       DossierLijst,
-      VoegDossierToe,
-      VerwijderDossier
+      VoegDossierToe
   }
