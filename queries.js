@@ -11,17 +11,6 @@ const dossier_query = gql`
   }
   `;
 
-
-  const persoon_query = gql `
-  {
-    persoons
-    {
-      uri
-      label
-    }
-  }`;
-
-
   const dossier_filtered_query = gql`
   query dossiers($uri: ID)
   {
@@ -72,14 +61,22 @@ commit
 }
 `;
 
-
+/*
+  const persoon_query = gql `
+  {
+    persoons
+    {
+      uri
+      label
+    }
+  }`;
+*/
 
 //  commit (message: "dossier toegevoegd")
 
   export {
     dossier_filtered_query,
     dossier_query,
-    persoon_query,
     dossier_toevoeg_query,
     verwijder_dossier_query,
     pas_label_aan_dossier

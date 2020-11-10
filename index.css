@@ -8,6 +8,7 @@ ol, ul {
   padding-left: 30px;
 }
 
+/* Sema Navigatie */
 .topnav {
   background-color: #004682;
   overflow: hidden;
@@ -39,72 +40,61 @@ ol, ul {
 
 
 
-
-.header {
+/* Sema App */
+.app_header {
   margin-left:  30px;
   font-size: 60px ;
 }
-.header_dossierlijst {
+.app_maak_dossier {
   margin-left:  30px;
+  margin-bottom: 10px;
+  font-size: 35px ;
+  color: #F2F2F2;
+  font-family: Arial;
+  display: inline-block;
+}
+.app_verwijder_dossier{
+  margin-left:  30px;
+  margin-bottom: 10px;
+  font-size: 35px ;
+  color: #F2F2F2;
+  font-family: Arial;
+  display: inline-block;
+}
+.app_beschikbare_dossiers{
+  margin-left:  30px;
+  margin-bottom: 10px;
+  font-size: 35px ;
+  color: #F2F2F2;
+  font-family: Arial;
+}
+.app_dossierinfo{
+  margin-left:  30px;
+  margin-bottom: 10px;
+  font-size: 15px ;
+  font-family: Arial;
+}
+
+
+
+/* Sema DossierLijst */
+.dossierlijst {
+  border: 0px solid black  ;
+}
+.dossierlijst_header {
   font-size: 35px ;
   border: 0px solid black ;
   background-color: #004682 ;
   color: #F2F2F2;
   font-family: Arial;
 }
-.formulier {
-  margin-left:  30px;
-  margin-bottom: 10px;
-  font-size: 35px ;
-  color: #F2F2F2;
-  font-family: Arial;
+.dossierlijst_inhoud {
+  border: 0px solid black  ;
 }
-.formulier_verwijder_dossier{
-  margin-left:  30px;
-  margin-bottom: 10px;
-  font-size: 35px ;
-  color: #F2F2F2;
-  font-family: Arial;
-  display: inline-block;
-}
-
-.dossierlijst_info {
-  border: 0.5px solid black ;
-  margin-left: 30px;
-  margin-top: 10px;
-}
-
-
-/* dossier informatie box */
-.dossier_info{
-  border: 0.5px solid black ;
-  margin-left: 30px;
-  margin-top: 10px;
-  border-radius: 1px;
-  background-color: #c2cfdf ;
-  /*width: 50%;
-  
-  box-sizing: border-box;
-  */
-}
-.dossier_label{
-
-  margin: 10px;
-}
-.dossier_uri{
-  margin: 10px;
-}
-.dossierinfo_table_header{
-  text-align: left;
-}
-.dossierinfo_table_form{
-  display: inline-block;
-}
-
-
-.listbutton {
-  border: 0.5px solid black ;
+.dossierlijst_inhoud_listbutton {
   color: black;
+  border: 0px solid black  ;
+  background-color: #F2F2F2 ;
   text-align: left;
   text-decoration: none;
   font-size: 16px;
@@ -112,29 +102,76 @@ ol, ul {
   cursor: pointer;
   margin: 1px;
 }
-.refetchbutton{
-  display: inline-block;
-  margin-left: 30px;
+
+.dossierlijst_inhoud_listbutton:hover 
+{
+  color: white;
+  background-color: #2533ac ;
+  text-align: left;
+  text-decoration: none;
+  font-size: 16px;
+  size: 2px;
+  cursor: pointer;
+  margin: 1px;
+} 
+
+a.dossierlijst_inhoud_listbutton {
+  color: black;
+  border: 1px solid black  ;
+  background-color: #F2F2F2 ;
+  text-align: left;
+  text-decoration: none;
+  font-size: 16px;
+  size: 2px;
+  cursor: pointer;
+  margin: 1px;
 }
 
+
+
+
+/* Sema Dossier Info */
+.dossierinfo{
+  border: 0.5px solid black  ;
+  background-color: #c2cfdf ;
+}
+.dossierinfo_header{
+  text-align: left;
+}
+.dossierinfo_body{
+  margin: 10px;
+}
+.dossierinfo_label{
+  margin: 10px;
+}
+.dossierinfo_uri{
+  margin: 10px;
+}
+.dossierinfo_refetchbutton{
+ display: inline; 
+}
+
+
+/* Sema Verwijder Dossier */
 .verwijder_dossier {
   display: inline-block;
 }
 
 
-.info {
-    display: inline-block;
-    margin-left: 30px;
-  }
-
-.label {
-    font-size: 125%;
-
+/* Sema Tabel */
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
 }
-.image {
-  width: 75px;
-  border-radius: 8px;
-}  
-.refetchbutton{
-  display: none
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+

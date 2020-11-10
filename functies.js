@@ -1,9 +1,6 @@
 import React from 'react';   //, { useState }
 import { useQuery, useMutation } from '@apollo/client';
 import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query, pas_label_aan_dossier } from './queries.js';
-import   {Dossier, Persoon} from './index.js' ;
-
-
 
 function DossierLijst ({ onDossierSelected } ) {
     const { loading, error, data } = useQuery(dossier_query);
@@ -11,12 +8,18 @@ function DossierLijst ({ onDossierSelected } ) {
     if (error) return <p>Error :(</p>;
   
     return(
-    <div> <div className = "header_dossierlijst">Beschikbare dossiers</div>
-    <div className = "dossierlijst_info" >
+    <div className = "dossierlijst"> 
+    <div className = "dossierlijst_header">Beschikbare dossiers</div>
+    <div className = "dossierlijst_inhoud" >
       {data.dossiers.map(
           dossier => (
             <div key={dossier.uri}> 
-              <button type="button" className="listbutton" key={dossier.uri} value={dossier.uri} onClick = {onDossierSelected}>
+              <button 
+              type="button" 
+              className="dossierlijst_inhoud_listbutton" 
+              key={dossier.uri} 
+              value={dossier.uri} 
+              onClick = {onDossierSelected}>
                   {dossier.label}
               </button>
             </div>
@@ -28,21 +31,10 @@ function DossierLijst ({ onDossierSelected } ) {
     )
   }
 
-function PersoonFunctie() {
-    const { loading, error, data } = useQuery(persoon_query);
-  
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error :(</p>;
-  
-    return(
-      <div>
-        {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
-      </div>
-    )
-  }
+function DossierInfo ({ uri }) {
 
-function DossierInfo ({ uri, label }) {
   let input;  
+
   const { loading, error, data, refetch, networkStatus } = useQuery(
         dossier_filtered_query, 
         {
@@ -60,36 +52,39 @@ function DossierInfo ({ uri, label }) {
       return (
        <div>
         {data.dossiers.map(dossier => (
-          <table className= "dossier_info">
-          <tbody>
-            <tr className="dossierinfo_table_header">
-              <th>Eigenschap</th>
-              <th>Waarde</th>
-              <th>Wijzig</th>
-            </tr>
-            <tr className= "dossier_uri">
+          <table  key={dossier.uri} className= "dossierinfo">
+            <thead>
+              <tr className="dossierinfo_header">
+                <th>Eigenschap</th>
+                <th>Waarde</th>
+                <th>Wijzig</th>
+              </tr>
+            </thead>
+            <tbody  className= "dossierinfo_body">
+            <tr className= "dossierinfo_uri">
               <td>Uri </td>
               <td>{dossier.uri}</td>
             </tr>
-            <tr className= "dossier_label">
+            <tr className= "dossierinfo_label">
               <td>Label </td>
               <td> {dossier.label}</td>
               <td>
                 <form className="dossierinfo_table_form'" onSubmit = {e => {
-          e.preventDefault();
-          pasLabelAan(
-            { variables: {label:input.value,  uri }  }
-          );
-          console.log({uri});
-          uri= ""
-        }}>
-                  <input placeholder="nieuw label" 
-          required
-          ref={node => {
-            input = node;
-          }} >
-                  </input>
-                  <button type="submit"  onClick={() => refetch()}>pas aan</button>
+                  e.preventDefault();
+                  pasLabelAan(
+                    { variables: {label:input.value,  uri }  }
+                  );
+                  console.log({uri});
+                  uri= ""
+                  }}
+                  >
+                    <input 
+                    placeholder="nieuw label" 
+                    required
+                    ref={node => {input = node;}}
+                    >
+                    </input>
+                  <button  type="submit" >pas aan</button>
                 </form>
               </td>
             </tr> 
@@ -99,14 +94,13 @@ function DossierInfo ({ uri, label }) {
         )
         }
         <div className="refetchbutton"> 
-          <button className ="refetchbutton" onClick={() => refetch()}>
+          <button className ="dossierinfo_refetchbutton" onClick={() => refetch()}>
           Refetch
           </button> 
         </div>
        </div>
 
       )
-    
   };
 
 
@@ -181,11 +175,25 @@ function VoegDossierToe () {
     )
   } ;
   
-  //{data.dossiers.map(dossierinfo => <DossierInfo key={data.uri} {...dossierinfo}/>)}
+  
+  /*
+function PersoonFunctie() {
+    const { loading, error, data } = useQuery(persoon_query);
+  
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error :(</p>;
+  
+    return(
+      <div>
+        {data.persoons.map(persoon => <Persoon key={data.uri} {...persoon}/>)}
+      </div>
+    )
+  }
+  */
+
 
   export {
       DossierInfo,
-      PersoonFunctie,
       DossierLijst,
       VoegDossierToe,
       VerwijderDossier
