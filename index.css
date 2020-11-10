@@ -74,6 +74,12 @@ ol, ul {
   font-size: 15px ;
   font-family: Arial;
 }
+.app_activiteitinfo{
+  margin-left:  30px;
+  margin-bottom: 10px;
+  font-size: 15px ;
+  font-family: Arial;
+}
 
 
 
@@ -127,9 +133,7 @@ a.dossierlijst_inhoud_listbutton {
   margin: 1px;
 
 }
-.dossierlijst_inhoud_formulier {
-  display: inline;
-}
+
 
 .dossierlijst_inhoud_verwijderbutton {
   display: none;
@@ -162,6 +166,27 @@ a.dossierlijst_inhoud_listbutton {
 .dossierinfo_refetchbutton{
  display: inline; 
 }
+
+
+
+/* Sema Dossier Info */
+.activiteitinfo{
+  border: 0.5px solid black  ;
+  background-color: #c2cfdf ;
+}
+.activiteitinfo_body{
+  margin: 10px;
+}
+.activiteitinfo_header{
+  text-align: left;
+}
+.activiteitinfo_label{
+  margin: 10px;
+}
+.activiteitinfo_uri{
+  margin: 10px;
+}
+
 
 
 /* Sema Verwijder Dossier */

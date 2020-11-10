@@ -19,6 +19,18 @@ const dossier_query = gql`
       uri
       rdfs_label
       prefLabel {string}
+      activiteit {label, uri}
+    }
+  }
+  `;
+
+  const activiteiten_filtered_query = gql`
+  query activiteiten($uri: ID)
+  {
+    activiteits(uri: $uri) 
+    {
+      uri
+      label
     }
   }
   `;
@@ -81,7 +93,8 @@ commit
     dossier_query,
     dossier_toevoeg_query,
     verwijder_dossier_query,
-    pas_label_aan_dossier
+    pas_label_aan_dossier,
+    activiteiten_filtered_query
   }
 
   

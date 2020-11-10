@@ -1,8 +1,8 @@
 import React from 'react';   //, { useState }
 import { useQuery, useMutation } from '@apollo/client';
-import  { dossier_filtered_query, persoon_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query, pas_label_aan_dossier } from './queries.js';
+import  { dossier_filtered_query, activiteiten_filtered_query, dossier_query,dossier_toevoeg_query, verwijder_dossier_query, pas_label_aan_dossier } from './queries.js';
 
-function DossierLijst ({ onDossierSelected } ) {
+function DossierLijst ({ onDossierSelected }, { onActiviteitDeSelected } ) {
     const [verwijderDossier] = useMutation(verwijder_dossier_query);
     const { loading, error, data } = useQuery(dossier_query);
     if (loading) return <p>Loading...</p>;
@@ -19,7 +19,7 @@ function DossierLijst ({ onDossierSelected } ) {
                    className="dossierlijst_inhoud_formulier" 
                   onSubmit = {e => {
                   e.preventDefault();
-                  if (window.confirm ('Weet je het zeker?'))
+                  if (window.confirm ('Je verwijderd een dossier: Weet je het zeker?'))
                   verwijderDossier({ variables: { uri:dossier.uri }  });
                   
                   }}
@@ -30,8 +30,7 @@ function DossierLijst ({ onDossierSelected } ) {
               key={dossier.uri} 
               value={dossier.uri} 
               onClick = {onDossierSelected}>
-                  {dossier.label}
-                  
+                  {dossier.label} ({dossier.uri})
               </button>
               <button
                 type =  "submit"
@@ -48,7 +47,7 @@ function DossierLijst ({ onDossierSelected } ) {
     )
   }
 
-function DossierInfo ({ uri }) {
+function DossierInfo ({ uri, onActiviteitSelected }) {
 
   let input;  
 
@@ -79,7 +78,7 @@ function DossierInfo ({ uri }) {
             </thead>
             <tbody  className= "dossierinfo_body">
             <tr className= "dossierinfo_uri">
-              <td>Uri </td>
+              <td>uri</td>
               <td>{dossier.uri}</td>
             </tr>
             <tr className= "dossierinfo_label">
@@ -109,20 +108,73 @@ function DossierInfo ({ uri }) {
               <td>prefLabel </td>
               <td> {dossier.prefLabel.map(prefLabel =>(<div>{prefLabel.string} </div>))}</td>
             </tr> 
+
+            <tr className= "dossierinfo_activiteiten" key= {dossier.activiteit.label}>
+              <td>activiteit </td>
+              <td> {dossier.activiteit? dossier.activiteit.map(activiteit =>(<button value={activiteit.uri} onClick={onActiviteitSelected}> {activiteit.label} </button>)) : 'geen activiteiten'}</td>
+              <td></td>
+            </tr> 
           </tbody>
        </table>
         )
         )
         }
+
         <div className="refetchbutton"> 
           <button className ="dossierinfo_refetchbutton" onClick={() => refetch()}>
           Refetch
           </button> 
         </div>
-       </div>
+        
+      </div>
 
       )
   };
+
+
+function ActiviteitInfo ( { uri } ) {
+
+  const { loading, error, data, networkStatus } = useQuery(
+    activiteiten_filtered_query, 
+    {
+     variables: { uri },
+     notifyOntNetworkStatusChange: true 
+    }
+);
+
+if (networkStatus === 4) return <p>Refetch</p> ;
+if (loading) return null;
+if (error) return `Error! ${error}`;
+
+  return(
+  <div>
+
+  {data.activiteits.map(activiteit => (
+    <table  key={activiteit.uri} className= "activiteitinfo">
+    <thead>
+        <tr className="activiteitinfo_header">
+          <th>Eigenschap</th>
+          <th>Waarde</th>
+          <th>Wijzig</th>
+        </tr>
+      </thead>
+      <tbody  className= "activiteitinfo_body"></tbody>
+      <tr >
+        <td>uri</td>
+        <td>{activiteit.uri}</td>
+        <td></td>
+      </tr>
+      <tr className= "activiteitinfo_preflabel">
+      <td>label</td>
+        <td>{activiteit.label}</td>
+        <td></td>
+      </tr>
+    </table>
+  ))}
+
+  </div>
+  )
+}
 
 
 function VoegDossierToe () {
@@ -219,5 +271,6 @@ function PersoonFunctie() {
   export {
       DossierInfo,
       DossierLijst,
-      VoegDossierToe
+      VoegDossierToe,
+      ActiviteitInfo
   }

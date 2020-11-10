@@ -3,7 +3,7 @@ import ReactDOM, { render } from 'react-dom';
 import './index.css';
 import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
-import {DossierInfo, DossierLijst, VoegDossierToe} from  './functies.js' ;
+import {DossierInfo, DossierLijst, VoegDossierToe, ActiviteitInfo} from  './functies.js' ;
 
 
 // =========================Appolo direct connector===
@@ -21,15 +21,17 @@ const client = new ApolloClient({
 // =========================App ===
 function App () {
   const [selectedDossier, setSelectedDossier] = useState(null) ;
-  const [GeselecteerdDossierVoorVerwijdering, setGeselecteerdDossierVoorVerwijdering] = useState(null) ;
+  const [selectedActiviteit, setSelectedActiviteit] = useState(null) ;
+  //const [GeselecteerdDossierVoorVerwijdering, setGeselecteerdDossierVoorVerwijdering] = useState(null) ;
 
   function onDossierSelected({ target }) {
     setSelectedDossier(target.value);
+    setSelectedActiviteit(null);
+  };
+  function onActiviteitSelected({ target }) {
+    setSelectedActiviteit(target.value);
   };
 
-  function onGeselecteerdDossierVoorVerwijdering({ target }) {
-    setGeselecteerdDossierVoorVerwijdering(target.value);
-  };
     
   return (
     <ApolloProvider client={client}>
@@ -42,14 +44,15 @@ function App () {
           <a href="#activiteiten">Activiteiten</a>
         </div>
         <div className="app_maak_dossier"><VoegDossierToe /></div>
-        
         <div className="app_beschikbare_dossiers"><DossierLijst onDossierSelected={onDossierSelected} /></div>
-        <div className="app_dossierinfo">{selectedDossier && <DossierInfo uri={selectedDossier}/>}</div>
+        <div className="app_dossierinfo">{selectedDossier && <DossierInfo uri={selectedDossier} onActiviteitSelected={onActiviteitSelected}/>}</div>
+        <div className="app_activiteitinfo"> {selectedActiviteit && <ActiviteitInfo uri={selectedActiviteit}/>}</div>
     </div>
     </ApolloProvider>
     )
 };
 
+// {selectedActiviteit && <ActiviteitInfo uri={selectedActiviteit}/>} het && teken zorgt ervoor dat de selectedActiviteit eerst gekozen moet zijn voordat er iets getoont wordt
 // =======MAIN=================================
 
 ReactDOM.render(
