@@ -3,7 +3,7 @@ import ReactDOM, { render } from 'react-dom';
 import './index.css';
 import { ApolloClient, InMemoryCache, useMutation, createHttpLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client';
-import {DossierInfo, DossierLijst, VoegDossierToe, ActiviteitInfo} from  './functies.js' ;
+import {DossierInfo, DossierLijst, VoegDossierToe, ActiviteitInfo,DossierSoortLijst} from  './functies.js' ;
 
 
 // =========================Appolo direct connector===
@@ -22,7 +22,7 @@ const client = new ApolloClient({
 function App () {
   const [selectedDossier, setSelectedDossier] = useState(null) ;
   const [selectedActiviteit, setSelectedActiviteit] = useState(null) ;
-  //const [GeselecteerdDossierVoorVerwijdering, setGeselecteerdDossierVoorVerwijdering] = useState(null) ;
+  const [selectedClass, setSelectedClass] = useState(null) ;
 
   function onDossierSelected({ target }) {
     setSelectedDossier(target.value);
@@ -30,6 +30,10 @@ function App () {
   };
   function onActiviteitSelected({ target }) {
     setSelectedActiviteit(target.value);
+  };
+  function onClassSelected({ target }) {
+    setSelectedClass(target.value);
+    console.log(target.value)
   };
 
     
@@ -43,7 +47,9 @@ function App () {
           <a href="#dossiers">Dossiers</a>
           <a href="#activiteiten">Activiteiten</a>
         </div>
-        <div className="app_maak_dossier"><VoegDossierToe /></div>
+       
+        <div className="app_maak_dossier"><VoegDossierToe uri_class={selectedClass}  onClassSelected={onClassSelected} /></div>
+       
         <div className="app_beschikbare_dossiers"><DossierLijst onDossierSelected={onDossierSelected} /></div>
         <div className="app_dossierinfo">{selectedDossier && <DossierInfo uri={selectedDossier} onActiviteitSelected={onActiviteitSelected}/>}</div>
         <div className="app_activiteitinfo"> {selectedActiviteit && <ActiviteitInfo uri={selectedActiviteit}/>}</div>
@@ -52,7 +58,6 @@ function App () {
     )
 };
 
-// {selectedActiviteit && <ActiviteitInfo uri={selectedActiviteit}/>} het && teken zorgt ervoor dat de selectedActiviteit eerst gekozen moet zijn voordat er iets getoont wordt
 // =======MAIN=================================
 
 ReactDOM.render(
@@ -61,6 +66,7 @@ ReactDOM.render(
 )
 
 // <div className="app_verwijder_dossier"><VerwijderDossier uri={GeselecteerdDossierVoorVerwijdering} onGeselecteerdDossierVoorVerwijdering={onGeselecteerdDossierVoorVerwijdering}/></div>
+// {selectedActiviteit && <ActiviteitInfo uri={selectedActiviteit}/>} het && teken zorgt ervoor dat de selectedActiviteit eerst gekozen moet zijn voordat er iets getoont wordt
 
 //{testData.map(dossier => <Dossier key={testData.uri} {...dossier}/>)}
 // Je geeft in de klasse dossier de properties mee, die kunnen als input dienen in dossier dus: <Dossier uri={testData[0].uri} label={testData[0].label}/>  etc etc..
@@ -69,18 +75,4 @@ ReactDOM.render(
 // {data.dossiers.map(dossier => <Dossier key={data.uri} {...dossier}/>)}
 //{data.dossiers.map(dossierinfo => <DossierInfo key={data.uri} {...dossierinfo}/>)}
 
-/*
-class Persoon extends React.Component {
-
-  render(
-  ) {
-    const persoon = this.props ; 
-    return (
-      <div className= "persoon_info">
-        <div className= "persoon_info_button">{persoon.label}</div>
-      </div>
-    )
-  }
-};
-*/
 

@@ -8,6 +8,23 @@ ol, ul {
   padding-left: 30px;
 }
 
+/* Sema Tabel */
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
 /* Sema Navigatie */
 .topnav {
   background-color: #004682;
@@ -169,7 +186,7 @@ a.dossierlijst_inhoud_listbutton {
 
 
 
-/* Sema Dossier Info */
+/* Sema Activiteit Info */
 .activiteitinfo{
   border: 0.5px solid black  ;
   background-color: #c2cfdf ;
@@ -195,20 +212,4 @@ a.dossierlijst_inhoud_listbutton {
 }
 
 
-/* Sema Tabel */
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
 
