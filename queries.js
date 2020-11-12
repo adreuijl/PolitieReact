@@ -1,7 +1,7 @@
 import {  gql } from '@apollo/client';
 
 const dossier_soort_query = gql`
-query GetClasses ($uri: ID = "http://adser.nl/model/Dossier") 
+query GetClasses ($uri: ID = "http://ontologie.politie.nl/def/dossier#Dossier") 
 {
   classes (subClassOf: $uri) 
   {
@@ -41,8 +41,8 @@ query dossiers($uri: ID)
   dossiers(uri: $uri) 
   {
     uri
-    rdfs_label
-    prefLabel {string}
+    rdfs_label {string}
+    prefLabel
     activiteit {label, uri}
   }
 }
@@ -72,13 +72,14 @@ mutation verwijderDossier($uri: ID)
 }
 `;
 
+// pas rdfs label aan
 const pas_label_aan_dossier = gql`
-mutation pasLabelAan($uri: ID , $label: [String])
+mutation pasLabelAan($uri: ID , $label: String!)
 {
   updateDossier(input: 
 {
   uri: $uri
-  rdfs_label:$label
+  rdfs_label: {string:$label}
 })
   commit
 }
@@ -86,17 +87,13 @@ mutation pasLabelAan($uri: ID , $label: [String])
 
 // Aanmaken van een dossier op basis van het label
 const dossier_toevoeg_query = gql`
-mutation voegDossierToe($uri: ID, $label:[String],  $prefLabel: String!) 
+mutation voegDossierToe($uri: ID, $label: String!, $type: ID)
 {
   createDossier(input: {
     uri: $uri,
-    type: {uri: "http://adser.nl/model/Dossier"},
-    prefLabel: {string: $prefLabel},
-    broadMatch: {uri: "http://example.org/taxonomies/Taxonomie#Signaaldossier456"},
-    hidden: false,
-    note: {string: ""},
-    rdfs_label:  $label, 
-    topConceptOf: {uri: "http://example.org/taxonomies/taxonomie#InstantiesTbvReactApp"}, 
+    rdf_type: {uri: $type},
+    rdfs_label:  {string:$label}, 
+    topConceptOf: {uri: "http://data.politie.nl/politie/id/InstantiedataFirstOffender"}, 
 })
 commit
 }
