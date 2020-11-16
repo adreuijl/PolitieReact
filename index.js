@@ -8,7 +8,7 @@ import {DossierInfo, DossierLijst, VoegDossierToe, ActiviteitInfo,DossierSoortLi
 
 // =========================Appolo direct connector===
 const link = createHttpLink({
-  uri: 'http://localhost:8083/tbl/graphql/first_offender',
+  uri: 'http://localhost:8083/tbl/graphql/usecase_first_offender',
   credentials: 'include'
 });
 
